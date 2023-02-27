@@ -1,32 +1,32 @@
 from datetime import datetime, timedelta
-from typing import List
 
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
-from src.database.models import Contact
+from src.database.models import Contact, User
 from src.schemas import ContactModel
 
 
-async def get_contacts(db: Session):
-    contacts = db.query(Contact).all()
+async def get_contacts(user: User, db: Session):
+    contacts = db.query(Contact).filter(and_(Contact.user_id == user.id)).all()
     return contacts
 
 
-async def get_contact(contact_id: int, db: Session):
-    contact = db.query(Contact).filter_by(id=contact_id).first()
+async def get_contact(contact_id: int, user: User, db: Session):
+    contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
     return contact
 
 
-async def create_contact(body: ContactModel, db: Session):
-    contact = Contact(**body.dict())
+async def create_contact(body: ContactModel, user: User, db: Session):
+    contact = Contact(**body.dict(), user_id=user.id)
     db.add(contact)
     db.commit()
     db.refresh(contact)
     return contact
 
 
-async def update_contact(body: ContactModel, contact_id: int, db: Session):
-    contact = db.query(Contact).filter_by(id=contact_id).first()
+async def update_contact(body: ContactModel, contact_id: int, user: User, db: Session):
+    contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
     if contact:
         contact.name = body.name
         contact.surname = body.surname
@@ -38,8 +38,8 @@ async def update_contact(body: ContactModel, contact_id: int, db: Session):
     return contact
 
 
-async def remove_contact(contact_id: int, db: Session):
-    contact = db.query(Contact).filter_by(id=contact_id).first()
+async def remove_contact(contact_id: int, user: User, db: Session):
+    contact = db.query(Contact).filter(and_(Contact.id == contact_id, Contact.user_id == user.id)).first()
     if contact:
         db.delete(contact)
         db.commit()
