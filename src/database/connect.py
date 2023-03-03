@@ -1,15 +1,20 @@
-import configparser
-import pathlib
+import os
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+from src.conf.config import settings
 
-file_config = pathlib.Path(__file__).parent.joinpath('config.ini')
-config = configparser.ConfigParser()
-config.read(file_config)
+load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = config.get('DB', 'url')
+db_type = os.environ.get('db')
+user = os.environ.get('user')
+password_db = os.environ.get('password_db')
+host = os.environ.get('host')
+name_app = os.environ.get('name_app')
+
+SQLALCHEMY_DATABASE_URL = settings.sqlalchemy_database_url
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

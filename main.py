@@ -1,14 +1,37 @@
 import time
 
+import redis.asyncio as redis
 import uvicorn
 from fastapi import FastAPI, Depends, HTTPException, status, Request
+from fastapi_limiter import FastAPILimiter
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from src.conf.config import settings
 from src.database.connect import get_db
 from src.routes import contacts, auth
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000"
+    ]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.on_event("startup")
+async def startup():
+    r = await redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0, encoding="utf-8",
+                          decode_responses=True)
+    await FastAPILimiter.init(r)
 
 
 @app.middleware("http")
