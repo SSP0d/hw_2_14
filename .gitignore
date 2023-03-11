@@ -1,0 +1,7 @@
+src/conf
+.env
+.idea
+alembic.ini
+alembic
+postgres-data
+docs
