@@ -18,6 +18,7 @@ class TestUser(unittest.IsolatedAsyncioTestCase):
             password="1234567890"
         )
 
+
     async def test_create_user(self):
         body = self.body
         result = await create_user(body=body, db=self.session)
