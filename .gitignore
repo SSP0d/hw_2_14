@@ -1,7 +1,8 @@
 src/conf
-.env
 .idea
-alembic.ini
 alembic
 postgres-data
-docs
+.pytest_cache
+
+alembic.ini
+.env
