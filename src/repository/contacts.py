@@ -141,5 +141,4 @@ async def searcher(part_to_search: str, db: Session):
             contact_list.append(contact)
         if part_to_search.capitalize() in contact.email.capitalize() and contact not in contact_list:
             contact_list.append(contact)
-
     return contact_list
