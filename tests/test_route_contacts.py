@@ -1,15 +1,11 @@
-import os
-import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-from src.services.messages import NOT_FOUND
-from src.services.urls_const import URL_SIGNUP, URL_LOGIN
-
-sys.path.append(os.getcwd())
 from src.database.models import User
 from src.services.auth import auth_service
+from src.services.messages import NOT_FOUND
+from src.services.urls_const import URL_SIGNUP, URL_LOGIN
 
 
 @pytest.fixture()
@@ -37,6 +33,3 @@ def test_get_contacts_not_found(client, token):
         assert response.status_code == 404, response.text
         data = response.json()
         assert data["detail"] == NOT_FOUND
-
-
-
