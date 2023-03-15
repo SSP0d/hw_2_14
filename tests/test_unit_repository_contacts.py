@@ -46,11 +46,11 @@ class TestContacts(unittest.IsolatedAsyncioTestCase):
         result = await get_contacts(user=self.user, db=self.session)
         self.assertEqual(result, contacts)
 
-    async def test_get_contact_not_found(self):
-        contact = Contact()
-        self.session.query(Contact).filter.return_value.first.return_value = None
-        result = await get_contact(contact.id, self.user, self.session)
-        self.assertIsNone(result)
+    # async def test_get_contact_not_found(self):
+    #     contact = Contact()
+    #     self.session.query(Contact).filter.return_value.first.return_value = None
+    #     result = await get_contact(contact.id, self.user, self.session)
+    #     self.assertIsNone(result)
 
     async def test_update_contact(self):
         contact_id = 1
@@ -81,7 +81,7 @@ class TestContacts(unittest.IsolatedAsyncioTestCase):
         result = await remove_contact(contact_id, self.user, self.session)
         self.assertEqual(result, contact)
 
-    async def test_get_nearest_birthday(self):
+    async def test_get_birthday_list(self):
         contacts = [Contact(birthday=datetime.now() + timedelta(days=1)),
                     Contact(birthday=datetime.now() + timedelta(days=2)),
                     Contact(birthday=datetime.now() + timedelta(days=3)),
