@@ -46,11 +46,11 @@ class TestContacts(unittest.IsolatedAsyncioTestCase):
         result = await get_contacts(user=self.user, db=self.session)
         self.assertEqual(result, contacts)
 
-    # async def test_get_contact_not_found(self):
-    #     contact = Contact()
-    #     self.session.query(Contact).filter.return_value.first.return_value = None
-    #     result = await get_contact(contact.id, self.user, self.session)
-    #     self.assertIsNone(result)
+    async def test_get_contact_not_found(self):
+        contact = Contact()
+        self.session.query(Contact).filter.return_value.first.return_value = None
+        result = await get_contact(contact.id, self.user, self.session)
+        self.assertIsNone(result)
 
     async def test_update_contact(self):
         contact_id = 1
