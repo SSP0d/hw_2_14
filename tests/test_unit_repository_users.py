@@ -28,16 +28,20 @@ class TestUser(unittest.IsolatedAsyncioTestCase):
 
     async def test_get_user_by_email(self):
         body = self.body
-        await create_user(body=body, db=self.session)
-        user = self.session.query(User).filter(User.email == body.email).first().email
-        result = await get_user_by_email(email=body.email, db=self.session)
-        self.assertEqual(result.email, user)
+        user = User(email=body.email)
+        self.session.query().filter().first.return_value = user
+        result = await get_user_by_email(email=user.email, db=self.session)
+        self.assertEqual(result, user)
 
+    async def test_get_user_by_email_not_found(self):
+        self.session.query().filter().first.return_value = None
+        result = await get_user_by_email(email="fake_email@gmail.com", db=self.session)
+        self.assertIsNone(result)
 
     async def test_confirmed_email(self):
         body = self.body
-        await create_user(body=body, db=self.session)
-        await confirmed_email(email=body.email, db=self.session)
+        user = User(email=body.email)
+        await confirmed_email(email=user.email, db=self.session)
         result = await get_user_by_email(email=body.email, db=self.session)
         self.assertEqual(result.confirmed, True)
 
