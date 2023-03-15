@@ -1,4 +1,5 @@
 from datetime import date as birth_date
+from typing import Optional
 
 from pydantic import BaseModel, Field, EmailStr
 
@@ -10,8 +11,6 @@ class ContactModel(BaseModel):
     phone: str = Field(min_length=6, max_length=16)
     birthday: birth_date
     additionally: str = Field(min_length=3, max_length=300)
-    user_id: int
-
 
 class ResponseContact(BaseModel):
     id: int = 1
